@@ -10,8 +10,7 @@ def breakarray(array, n):
 	for i in range(n):
 		if i < n - 1:
 			result.append(array[i*sectionlength:(i+1)*sectionlength])
-                                                        
-		else:
+                else:
 			result.append(array[i*sectionlength:])
 
 	return result
