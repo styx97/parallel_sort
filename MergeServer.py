@@ -1,36 +1,26 @@
 import socket 
-import MergeSort	#Imports mergesort functions 
+from MergeSort import merge,merge_sort	#Imports mergesort functions 
 import random 
 import time 
 
-#breaks down array into n sections where n is the number of processors 
-def breakarray(array, n): 
-	sectionlength = len(array)//n	
-	result = [] 
-	for i in range(n):
-		if i < n - 1:
-			result.append(array[i*sectionlength:(i+1)*sectionlength])
-                                                        
-		else:
-			result.append(array[i*sectionlength:])
-
-	return result
+def findarray(s):
+	start = s.index('[')
+	end = s.index(']')
+	arr =  s[start+1:end].split(', ')
+	return list(map(int,arr))
 
 #Create an array to be sorted 
-arraylength = 100000	#Length of array to be sorted 
-print('Length of array is',arraylength)
-array = list(range(arraylength))	#Creates array 
-random.shuffle(array)	#Jumbles up array 
+l = 3000
 
+print('List length : ', l)
 
-#Specify info on processors/computers 
-#procno = int(sys.argv[1])	#number of processors 
-procno = 4
-print('Number of processors:', procno) 
-procID = 0	#ID of this processor(server) 
+# create an unsorted list with random numbers
+
+array  = [random.randint(0, l) for n in range(0, l)] 
+
 addr_list = []	                                           #list of client addresses 
 
-
+start_time = time.time()
 #Sets up network 
 HOST = '' 
 PORT = 50007 
@@ -38,45 +28,46 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)               #AF_INET is 
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)              # SOCK_STREAM > just a socket type 
 s.bind((HOST, PORT)) 
 
-s.listen(procno - 1)	                                   #Listens for (n) number of client connections 
+s.listen(1)	                                   #Listens for (n) number of client connections 
 print('Waiting for client...') 
 
-for i in range(procno - 1):	                                #Connects to all clients
-	# conn > new socket(uninheritable), object, addr > address
-	conn, addr = s.accept()	                                #Accepts connection from client 
-	print('Connected by', addr) 
-	addr_list.append(addr)	                                 #Adds address to address list
-
+	                                #Connects to all clients
+# conn > new socket(uninheritable), object, addr > address
+conn, addr = s.accept()	                                #Accepts connection from client 
+print('Connected by', addr) 
+addr_list.append(addr)	                                 #Adds address to address list
+#print("addr_list > " ,addr_list)
 #Start and time distributed computing sorting process	
 
 start_time = time.time()	#Records start time 
 
-sections = breakarray(array,procno)	#splits array into sections for every client 
+arraystring = repr(array) 
+#print("the data sent is",arraystring)
+conn.sendto(arraystring.encode('utf-8'),addr_list[0])	#Sends array string 
+print('Data sent, sorting array...')
 
-for i in range(procno - 1):	#Converts array section into string to be sent
 
-	arraystring = repr(sections[i+1]) 
-	conn.sendto(arraystring.encode('utf-8'),addr_list[i])	#Sends array string 
-	print('Data sent, sorting array...')
-
-array = MergeSort.merge_sort(sections[procID])	#Sorts section and stores it in array 
-print('Array sorted.')
-
-for i in range(procno - 1):	#Receives sorted sections from each client
-
-	arraystring = '' 
-	print('Receiving data from clients...') 
-	while 1:
-		data = conn.recv(4096)	#Receives data in chunks 
-		d = str(data)
-		arraystring += d	#Adds data to array string 
-		if ']' in d:	#When end of data is received	
-			break
-	print('Data received, merging arrays...')	
-	array = MergeSort.merge(array, eval(arraystring))	#Merges current array with section from client	
-	print('Arrays merged.')
-
+arraystring = '' 
+print('Receiving data from client...') 
+while 1:
+	data = conn.recv(4096)	#Receives data in chunks 
+	d = str(data)
+	#print("d",d)
+	arraystring += d	#Adds data to array string 
+	if ']' in d:	#When end of data is received	
+		break
+print("data received from client")
 conn.close() 
-time_taken = time.time() - start_time	#Calculates and records time_taken 
 
+time_taken = time.time() - start_time	#Calculates and records time_taken 
 print('Time taken to sort is ', time_taken, 'seconds.')	
+
+check_sort = time.time()
+
+#array_received = eval(arraystring[2:])
+#print(findarray(arraystring))
+
+sorted_here = merge_sort(array)
+
+#print("Sort truth evaluation",sorted_here == findarray(arraystring))
+print("time taken for single core operation", time.time()-check_sort)
