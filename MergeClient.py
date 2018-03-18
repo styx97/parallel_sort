@@ -29,7 +29,7 @@ while 1:
  
         data = s.recv(4096)     #Receives data in chunks
         #print data
-        d = str(data)
+        d = data.decode('utf-8')
         arraystring += d        #Adds data to array string
         if ']' in d:    #When end of data is received
  
@@ -37,8 +37,9 @@ while 1:
  
 #eval turns the string into an array
 array = eval(arraystring)
+
 print('Data received, sorting array... ' )
-#print("the received array is",array)
+#print("the received array is",array,type(array))
  
  
 if cores > 1:
@@ -48,6 +49,7 @@ if cores > 1:
         l = len(array)
  
         print("length of the array is ",l)
+        
         print('Starting %d-core process'%cores)
         start_time = time.time()
  
@@ -99,7 +101,7 @@ if cores > 1:
         print('Final merge duration : ', final_merge_time)
         multi_core_time = time.time() - start_time
         print("multi core time",multi_core_time)
-        # print("the sorted array is ",array)
+        #print("the sorted array is ",array)
         #print('Array sorted, sending data...')
         #Converts array into string to be sent back to server
         arraystring = repr(array)
