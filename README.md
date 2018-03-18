@@ -2,7 +2,7 @@
 
 ## Distributing a sorting task from a raspberry pi to a computer.
 
-In future, similar approaches can be taken where a task will be scheduled from a pi to a machine with larger computing power (such as a cluster of computers in a cloud) and the pi will just show the results. 
+Here , we have tried to sort an array of 50k floats by using all the cores of a connected pc. The result is then sent back to the pi and validated against sorting on a single core using the same algorithm (here, mergesort). 
 
 First, connect your pc with the pi using an ethernet cable, and edit the eth0 connectivities. 
 
@@ -17,6 +17,10 @@ Then, run MergeServer.py from the raspberry and MergeClient.py from the pc. The 
 
 For sorting 500000 randomly generated float values,the distributed sorting is about 5 times faster on average in the pi.
 Tested in python3 with a Raspberry Pi 3 B2. 
+
+
+In future, similar approaches can be taken where a task will be scheduled from a pi to a machine with larger computing power (such as a cluster of computers in a cloud) and the pi will just show the results. 
+
 
 ### Motivations 
 The Cambridge tutorial on distributed computing - 
