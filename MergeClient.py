@@ -70,9 +70,7 @@ if cores > 1:
                 proc = Process( target=merge_sort_multi, args=( array[n*step:], ) )
  
             p.append(proc)
- 
-        ''' http://docs.python.org/library/multiprocessing.html#multiprocessing.Process.start &
-        http://docs.python.org/library/multiprocessing.html#multiprocessing.Process.join each Process '''
+        # this may look weird, but is the accepted syntax (ref to docs) 
         for proc in p:
             proc.start()
         for proc in p:
