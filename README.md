@@ -2,7 +2,7 @@
 
 ## Distributing a sorting task from a raspberry pi to a computer.
 
-Here , we have tried to sort an array of 50k floats by using all the cores of a connected pc. The result is then sent back to the pi and validated against sorting on a single core using the same algorithm (here, mergesort). 
+Here, I have tried to speed up sorting 50k floats in pi by using all the cores of a connected pc. The result is then sent back to the pi and validated against sorting on a single core using the same algorithm (here, mergesort). 
 
 First, connect your pc with the pi using an ethernet cable, and edit the eth0 connectivities. 
 
