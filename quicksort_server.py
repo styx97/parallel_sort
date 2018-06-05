@@ -63,8 +63,7 @@ if cores > 1 :
     p = []
 
     for n in range(0, cores):
-        ''' we create a new Process object and assign the "merge_sort_multi" function to it,
-        using as input a sublist '''
+        
         if n < cores - 1:
             #pass part of a list to a process
 
@@ -74,8 +73,7 @@ if cores > 1 :
             proc = Process( target=quicksort_multi, args=( array_pi[n*step:], ) )
 
         p.append(proc)
-      ''' http://docs.python.org/library/multiprocessing.html#multiprocessing.Process.start &
-    http://docs.python.org/library/multiprocessing.html#multiprocessing.Process.join each Process '''
+      
     for proc in p:
         proc.start()
     for proc in p:
