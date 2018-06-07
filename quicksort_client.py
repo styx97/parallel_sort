@@ -1,5 +1,5 @@
 import socket
-from practice1 import qsort,merge
+from sorts import qsort,merge
 import os, sys, time
 import math, random
 from multiprocessing import Process, Manager
