@@ -21,6 +21,8 @@ Tested in python3 with a Raspberry Pi 3 B2.
 
 In future, similar approaches can be taken where a task will be scheduled from a pi to a machine with larger computing power (such as a cluster of computers in a cloud) and the pi will just show the results. 
 
+#### Edit : 
+Now you can change the ratio in which data is distributed from the pi to the pc. Change the varaible split_ratio in quicksort_server.py !
 
 ### Motivations 
 The Cambridge tutorial on distributed computing - 
